@@ -139,6 +139,7 @@
 	  ・PanelFont
 	  ・ProgramGuideFont
 	  ・StatusBarFont
+	  ・DPI
 	・プラグインのフラグに PLUGIN_FLAG_NOENABLEDDISABLED を追加した
 
 	ver.0.0.13 (TVTest ver.0.7.16 or later)
@@ -1418,6 +1419,7 @@ enum SettingType {
 	PanelFont             パネルのフォント                    データ(LOGFONT)
 	ProgramGuideFont      番組表のフォント                    データ(LOGFONT)
 	StatusBarFont         ステータスバーのフォント            データ(LOGFONT)
+	DPI                   UIのDPI                             int
 */
 
 // 設定を取得する
@@ -1479,12 +1481,12 @@ inline DWORD MsgGetSetting(PluginParam *pParam,LPCWSTR pszName,LPWSTR pszString,
 }
 
 // フォントの設定を取得する
-inline bool MsgGetSetting(PluginParam *pParam,LPCWSTR pszName,LOGFONT *pFont)
+inline bool MsgGetSetting(PluginParam *pParam,LPCWSTR pszName,LOGFONTW *pFont)
 {
 	SettingInfo Info;
 	Info.pszName=pszName;
 	Info.Type=SETTING_TYPE_DATA;
-	Info.ValueSize=sizeof(LOGFONT);
+	Info.ValueSize=sizeof(LOGFONTW);
 	Info.Value.pData=pFont;
 	return (*pParam->Callback)(pParam,MESSAGE_GETSETTING,(LPARAM)&Info,0)!=FALSE;
 }
@@ -2506,6 +2508,7 @@ struct StatusItemGetInfo {
 	HWND hwnd;			// ウィンドウハンドル
 	RECT ItemRect;		// 項目の領域
 	RECT ContentRect;	// 項目の余白を除いた領域
+	DWORD Style;		// スタイルフラグ(STATUS_ITEM_STYLE_*)
 };
 
 // ステータス項目の情報取得
@@ -2513,7 +2516,8 @@ enum {
 	STATUS_ITEM_GET_INFO_MASK_STATE			=0x00000001U,	// State を取得
 	STATUS_ITEM_GET_INFO_MASK_HWND			=0x00000002U,	// hwnd を取得
 	STATUS_ITEM_GET_INFO_MASK_ITEMRECT		=0x00000004U,	// ItemRect を取得
-	STATUS_ITEM_GET_INFO_MASK_CONTENTRECT	=0x00000008U	// ContentRect を取得
+	STATUS_ITEM_GET_INFO_MASK_CONTENTRECT	=0x00000008U,	// ContentRect を取得
+	STATUS_ITEM_GET_INFO_MASK_STYLE			=0x00000010U	// Style を取得
 };
 
 // ステータス項目の情報を取得する
@@ -2650,6 +2654,11 @@ inline bool MsgRegisterTSProcessor(PluginParam *pParam,const TSProcessorInfo *pI
 	return (*pParam->Callback)(pParam,MESSAGE_REGISTERTSPROCESSOR,(LPARAM)pInfo,0)!=FALSE;
 }
 
+// パネル項目のスタイル
+enum {
+	PANEL_ITEM_STYLE_NEEDFOCUS	=0x0001U	// キーボードフォーカスを受け取る
+};
+
 // パネル項目の状態
 enum {
 	PANEL_ITEM_STATE_ENABLED	=0x0001U,	// 有効(タブに表示されている)
@@ -2660,7 +2669,7 @@ enum {
 struct PanelItemInfo {
 	DWORD Size;			// 構造体のサイズ
 	DWORD Flags;		// 各種フラグ(現在は常に0)
-	DWORD Style;		// スタイルフラグ(現在は常に0)
+	DWORD Style;		// スタイルフラグ(PANEL_ITEM_STYLE_* の組み合わせ)
 	int ID;				// 識別子
 	LPCWSTR pszIDText;	// 識別子文字列
 	LPCWSTR pszTitle;	// タイトル
@@ -2679,11 +2688,14 @@ struct PanelItemSetInfo {
 	int ID;				// 項目の識別子
 	DWORD StateMask;	// 状態フラグのマスク(PANEL_ITEM_STATE_* の組み合わせ)
 	DWORD State;		// 状態フラグ(PANEL_ITEM_STATE_* の組み合わせ)
+	DWORD StyleMask;	// スタイルフラグのマスク(PANEL_ITEM_STYLE_* の組み合わせ)
+	DWORD Style;		// スタイルフラグ(PANEL_ITEM_STYLE_* の組み合わせ)
 };
 
 // パネル項目の設定
 enum {
-	PANEL_ITEM_SET_INFO_MASK_STATE	=0x00000001U	// StateMask / State を設定
+	PANEL_ITEM_SET_INFO_MASK_STATE	=0x00000001U,	// StateMask / State を設定
+	PANEL_ITEM_SET_INFO_MASK_STYLE	=0x00000002U	// StyleMask / Style を設定
 };
 
 // ステータス項目を設定する
@@ -2715,13 +2727,15 @@ struct PanelItemGetInfo {
 	DWORD State;		// 項目の状態フラグ(PANEL_ITEM_STATE_* の組み合わせ)
 	HWND hwndParent;	// 親ウィンドウのハンドル
 	HWND hwndItem;		// 項目のウィンドウハンドル
+	DWORD Style;		// スタイルフラグ(PANEL_ITEM_STYLE_* の組み合わせ)
 };
 
 // パネル項目の情報取得マスク
 enum {
 	PANEL_ITEM_GET_INFO_MASK_STATE		=0x0001U,	// State を取得
 	PANEL_ITEM_GET_INFO_MASK_HWNDPARENT	=0x0002U,	// hwndParent を取得
-	PANEL_ITEM_GET_INFO_MASK_HWNDITEM	=0x0004U	// hwndItem を取得
+	PANEL_ITEM_GET_INFO_MASK_HWNDITEM	=0x0004U,	// hwndItem を取得
+	PANEL_ITEM_GET_INFO_MASK_STYLE		=0x0008U	// Style を取得
 };
 
 // パネル項目の情報を取得する
@@ -3137,7 +3151,7 @@ public:
 	DWORD GetSetting(LPCWSTR pszName,LPWSTR pszString,DWORD MaxLength) {
 		return MsgGetSetting(m_pParam,pszName,pszString,MaxLength);
 	}
-	bool GetSetting(LPCWSTR pszName,LOGFONT *pFont) {
+	bool GetSetting(LPCWSTR pszName,LOGFONTW *pFont) {
 		return MsgGetSetting(m_pParam,pszName,pFont);
 	}
 	int GetDriverFullPathName(LPWSTR pszPath,int MaxLength) {
