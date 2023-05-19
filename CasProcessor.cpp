@@ -1,4 +1,4 @@
-#include <windows.h>
+ï»¿#include <windows.h>
 #include <tchar.h>
 #include <shlwapi.h>
 #define TVTEST_PLUGIN_CLASS_IMPLEMENT
@@ -472,11 +472,11 @@ STDMETHODIMP CFilterModuleImpl::LoadModule(LPCWSTR pszName)
 		WCHAR szText[MAX_PATH + 32], szAdvise[256];
 
 		::wnsprintfW(szText, _countof(szText),
-			L"CASƒ‰ƒCƒuƒ‰ƒŠ \"%s\" ‚ğƒ[ƒh‚Å‚«‚Ü‚¹‚ñB", pszName);
+			L"CASãƒ©ã‚¤ãƒ–ãƒ©ãƒª \"%s\" ã‚’ãƒ­ãƒ¼ãƒ‰ã§ãã¾ã›ã‚“ã€‚", pszName);
 
 		switch (ErrorCode) {
 		case ERROR_MOD_NOT_FOUND:
-			::lstrcpynW(szAdvise, L"ƒtƒ@ƒCƒ‹‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB", _countof(szAdvise));
+			::lstrcpynW(szAdvise, L"ãƒ•ã‚¡ã‚¤ãƒ«ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã€‚", _countof(szAdvise));
 			break;
 
 		case ERROR_BAD_EXE_FORMAT:
@@ -486,12 +486,12 @@ STDMETHODIMP CFilterModuleImpl::LoadModule(LPCWSTR pszName)
 #else
 				L"64"
 #endif
-				L"ƒrƒbƒg—p‚ÌDLL‚Å‚Í‚È‚¢‚©Aƒtƒ@ƒCƒ‹‚ª”j‘¹‚µ‚Ä‚¢‚é‰Â”\«‚ª‚ ‚è‚Ü‚·B",
+				L"ãƒ“ãƒƒãƒˆç”¨ã®DLLã§ã¯ãªã„ã‹ã€ãƒ•ã‚¡ã‚¤ãƒ«ãŒç ´æã—ã¦ã„ã‚‹å¯èƒ½æ€§ãŒã‚ã‚Šã¾ã™ã€‚",
 				_countof(szAdvise));
 			break;
 
 		default:
-			::wnsprintfW(szAdvise, _countof(szText), L"ƒGƒ‰[ƒR[ƒh: 0x%x", ErrorCode);
+			::wnsprintfW(szAdvise, _countof(szText), L"ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰: 0x%x", ErrorCode);
 		}
 
 		OnError(hr, szText, szAdvise);
@@ -507,22 +507,22 @@ STDMETHODIMP CFilterModuleImpl::LoadModule(LPCWSTR pszName)
 		OnError(
 			E_FAIL,
 			pGetModuleInfo == nullptr ?
-				L"w’è‚³‚ê‚½DLL‚ªCASƒ‰ƒCƒuƒ‰ƒŠ‚Å‚Í‚ ‚è‚Ü‚¹‚ñB" :
-				L"CASƒ‰ƒCƒuƒ‰ƒŠ‚Ìƒo[ƒWƒ‡ƒ“‚ª”ñ‘Î‰‚Å‚·B");
+				L"æŒ‡å®šã•ã‚ŒãŸDLLãŒCASãƒ©ã‚¤ãƒ–ãƒ©ãƒªã§ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚" :
+				L"CASãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®ãƒãƒ¼ã‚¸ãƒ§ãƒ³ãŒéå¯¾å¿œã§ã™ã€‚");
 		return E_FAIL;
 	}
 
 	TVCAS::CreateInstanceFunc pCreateInstance = TVCAS::Helper::Module::CreateInstance(m_hModule);
 	if (pCreateInstance == nullptr) {
 		UnloadModule();
-		OnError(E_FAIL, L"CASƒ‰ƒCƒuƒ‰ƒŠ‚©‚ç•K—v‚ÈŠÖ”‚ğæ“¾‚Å‚«‚Ü‚¹‚ñB");
+		OnError(E_FAIL, L"CASãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‹ã‚‰å¿…è¦ãªé–¢æ•°ã‚’å–å¾—ã§ãã¾ã›ã‚“ã€‚");
 		return E_FAIL;
 	}
 
 	m_pCasManager = static_cast<TVCAS::ICasManager*>(pCreateInstance(__uuidof(TVCAS::ICasManager)));
 	if (m_pCasManager == nullptr) {
 		UnloadModule();
-		OnError(E_FAIL, L"CASƒ}ƒl[ƒWƒƒ‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ğì¬‚Å‚«‚Ü‚¹‚ñB");
+		OnError(E_FAIL, L"CASãƒãƒãƒ¼ã‚¸ãƒ£ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ä½œæˆã§ãã¾ã›ã‚“ã€‚");
 		return E_FAIL;
 	}
 
@@ -1082,8 +1082,8 @@ void CPropertyPage::UpdateControls()
 				   fEnableInstructionSettings);
 	::SetDlgItemText(m_hwnd, IDC_PROPERTIES_INSTRUCTION_NOTE,
 		fEnableInstructionSettings ?
-			TEXT("¦‚±‚Ìİ’è‚ÍŸ‰ñ”½‰f‚³‚ê‚Ü‚·B") :
-			TEXT("¦‚±‚Ìİ’è‚Íƒ‚ƒWƒ…[ƒ‹‚ª“Ç‚İ‚Ü‚ê‚Ä‚¢‚é‚Ì‚İs‚¦‚Ü‚·B"));
+			TEXT("â€»ã“ã®è¨­å®šã¯æ¬¡å›åæ˜ ã•ã‚Œã¾ã™ã€‚") :
+			TEXT("â€»ã“ã®è¨­å®šã¯ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ãŒèª­ã¿è¾¼ã¾ã‚Œã¦ã„ã‚‹æ™‚ã®ã¿è¡Œãˆã¾ã™ã€‚"));
 
 	BSTR bstr;
 	if (SUCCEEDED(m_pCasProcessor->GetCardReaderName(&bstr))) {
@@ -1147,7 +1147,7 @@ void CPropertyPage::BenchmarkTest()
 		StringFormatAppend(szText, _countof(szText), &Pos, TEXT("%s\n"), szCPU);
 
 	StringFormatAppend(szText, _countof(szText), &Pos,
-					   TEXT("%u ‰ñ‚ÌÀs‚ÉŠ|‚©‚Á‚½ŠÔ\n\n"), BenchmarkCount);
+					   TEXT("%u å›ã®å®Ÿè¡Œã«æ›ã‹ã£ãŸæ™‚é–“\n\n"), BenchmarkCount);
 
 	DWORD NormalTime = Times[0];
 	DWORD MinTime = 0xFFFFFFFF;
@@ -1160,7 +1160,7 @@ void CPropertyPage::BenchmarkTest()
 
 			m_pCasProcessor->GetInstructionName(i, &Name);
 			StringFormatAppend(szText, _countof(szText), &Pos,
-							   TEXT("%s : %u ms (%d ƒpƒPƒbƒg/•b)"),
+							   TEXT("%s : %u ms (%d ãƒ‘ã‚±ãƒƒãƒˆ/ç§’)"),
 				Name, Time, ::MulDiv(BenchmarkCount, 1000, Time));
 			::SysFreeString(Name);
 			if (i > 0 && NormalTime > 0 && Time > 0) {
@@ -1170,7 +1170,7 @@ void CPropertyPage::BenchmarkTest()
 				else
 					Percentage = -(int)((Time * 100 / NormalTime) - 100);
 				StringFormatAppend(szText, _countof(szText), &Pos,
-								   TEXT(" (‚‘¬‰»‚³‚ê‚éŠ„‡ %d %%)"), Percentage);
+								   TEXT(" (é«˜é€ŸåŒ–ã•ã‚Œã‚‹å‰²åˆ %d %%)"), Percentage);
 			}
 			StringFormatAppend(szText, _countof(szText), &Pos, TEXT("\n"));
 
@@ -1184,11 +1184,11 @@ void CPropertyPage::BenchmarkTest()
 	BSTR Name;
 	m_pCasProcessor->GetInstructionName(Fastest, &Name);
 	StringFormatAppend(szText, _countof(szText), &Pos,
-					   TEXT("\n%s ‚É‚·‚é‚±‚Æ‚ğ‚¨Š©‚ß‚µ‚Ü‚·B"), Name);
+					   TEXT("\n%s ã«ã™ã‚‹ã“ã¨ã‚’ãŠå‹§ã‚ã—ã¾ã™ã€‚"), Name);
 	::SysFreeString(Name);
 
 	::MessageBox(m_hwnd,
-				 szText, TEXT("ƒxƒ“ƒ`ƒ}[ƒNƒeƒXƒgŒ‹‰Ê"),
+				 szText, TEXT("ãƒ™ãƒ³ãƒãƒãƒ¼ã‚¯ãƒ†ã‚¹ãƒˆçµæœ"),
 				 MB_OK | MB_ICONINFORMATION);
 }
 
@@ -1229,10 +1229,10 @@ INT_PTR CALLBACK CPropertyPage::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPA
 
 		case IDC_PROPERTIES_BENCHMARKTEST:
 			if (::MessageBox(hDlg,
-					TEXT("ƒxƒ“ƒ`ƒ}[ƒNƒeƒXƒg‚ğŠJn‚µ‚Ü‚·B\n")
-					TEXT("I—¹‚·‚é‚Ü‚Å‘€ì‚Ís‚í‚È‚¢‚æ‚¤‚É‚µ‚Ä‚­‚¾‚³‚¢B\n")
-					TEXT("Œ‹‰Ê‚Í‚Î‚ç‚Â‚«‚ª‚ ‚è‚Ü‚·‚Ì‚ÅA”‰ñÀs‚µ‚Ä‚­‚¾‚³‚¢B"),
-					TEXT("ƒxƒ“ƒ`ƒ}[ƒNƒeƒXƒg"),
+					TEXT("ãƒ™ãƒ³ãƒãƒãƒ¼ã‚¯ãƒ†ã‚¹ãƒˆã‚’é–‹å§‹ã—ã¾ã™ã€‚\n")
+					TEXT("çµ‚äº†ã™ã‚‹ã¾ã§æ“ä½œã¯è¡Œã‚ãªã„ã‚ˆã†ã«ã—ã¦ãã ã•ã„ã€‚\n")
+					TEXT("çµæœã¯ã°ã‚‰ã¤ããŒã‚ã‚Šã¾ã™ã®ã§ã€æ•°å›å®Ÿè¡Œã—ã¦ãã ã•ã„ã€‚"),
+					TEXT("ãƒ™ãƒ³ãƒãƒãƒ¼ã‚¯ãƒ†ã‚¹ãƒˆ"),
 					MB_OKCANCEL | MB_ICONINFORMATION) == IDOK) {
 				CPropertyPage *pThis = GetThis(hDlg);
 
@@ -1617,7 +1617,7 @@ STDMETHODIMP CCasProcessor::LoadModule(LPCWSTR pszName)
 	pCasClient->Release();
 	if (!fResult) {
 		UnloadModule();
-		OnError(E_FAIL, L"CASƒ}ƒl[ƒWƒƒ‚Ì‰Šú‰»‚ª‚Å‚«‚Ü‚¹‚ñB");
+		OnError(E_FAIL, L"CASãƒãƒãƒ¼ã‚¸ãƒ£ã®åˆæœŸåŒ–ãŒã§ãã¾ã›ã‚“ã€‚");
 		return E_FAIL;
 	}
 
@@ -1663,10 +1663,10 @@ STDMETHODIMP CCasProcessor::OpenFilter(int Device, LPCWSTR pszName, TVTest::Inte
 
 	WCHAR szName[MAX_PATH];
 	if (m_pCasManager->GetCasCardName(szName, _countof(szName)) > 0) {
-		OutLog(TVTest::Interface::LOG_INFO, L"ƒJ[ƒhƒŠ[ƒ_[ \"%s\" ‚ğƒI[ƒvƒ“‚µ‚Ü‚µ‚½B", szName);
+		OutLog(TVTest::Interface::LOG_INFO, L"ã‚«ãƒ¼ãƒ‰ãƒªãƒ¼ãƒ€ãƒ¼ \"%s\" ã‚’ã‚ªãƒ¼ãƒ—ãƒ³ã—ã¾ã—ãŸã€‚", szName);
 		TVCAS::CasCardInfo CardInfo;
 		if (m_pCasManager->GetCasCardInfo(&CardInfo)) {
-			OutLog(TVTest::Interface::LOG_INFO, L"(ƒJ[ƒhID %s / ƒJ[ƒh¯•Ê %c%03d)",
+			OutLog(TVTest::Interface::LOG_INFO, L"(ã‚«ãƒ¼ãƒ‰ID %s / ã‚«ãƒ¼ãƒ‰è­˜åˆ¥ %c%03d)",
 				   CardInfo.CardIDText, CardInfo.CardManufacturerID, CardInfo.CardVersion);
 		}
 	}
@@ -2056,7 +2056,7 @@ void CCasProcessor::OnCasEvent(UINT Event, void *pParam)
 
 	switch (Event) {
 	case TVCAS::EVENT_EMM_PROCESSED:
-		OutLog(TVTest::Interface::LOG_INFO, L"EMMˆ—‚ğs‚¢‚Ü‚µ‚½B");
+		OutLog(TVTest::Interface::LOG_INFO, L"EMMå‡¦ç†ã‚’è¡Œã„ã¾ã—ãŸã€‚");
 		break;
 
 	case TVCAS::EVENT_EMM_ERROR:
@@ -2064,9 +2064,9 @@ void CCasProcessor::OnCasEvent(UINT Event, void *pParam)
 			const TVCAS::EmmErrorInfo *pInfo = static_cast<TVCAS::EmmErrorInfo*>(pParam);
 
 			if (pInfo->pszText != nullptr && pInfo->pszText[0] != L'\0')
-				OutLog(TVTest::Interface::LOG_ERROR, L"EMMˆ—‚ÅƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½B(%s)", pInfo->pszText);
+				OutLog(TVTest::Interface::LOG_ERROR, L"EMMå‡¦ç†ã§ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚(%s)", pInfo->pszText);
 			else
-				OutLog(TVTest::Interface::LOG_ERROR, L"EMMˆ—‚ÅƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½B");
+				OutLog(TVTest::Interface::LOG_ERROR, L"EMMå‡¦ç†ã§ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚");
 		}
 		break;
 
@@ -2076,12 +2076,12 @@ void CCasProcessor::OnCasEvent(UINT Event, void *pParam)
 
 			if (m_ActiveServiceID != 0
 				&& m_pCasManager->GetEcmPIDByServiceID(m_ActiveServiceID) == pInfo->EcmPID) {
-				m_pClient->Notify(TVTest::Interface::NOTIFY_ERROR, L"ƒXƒNƒ‰ƒ“ƒuƒ‹‰ğœ‚ÅƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½");
+				m_pClient->Notify(TVTest::Interface::NOTIFY_ERROR, L"ã‚¹ã‚¯ãƒ©ãƒ³ãƒ–ãƒ«è§£é™¤ã§ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸ");
 
 				if (pInfo->pszText != nullptr && pInfo->pszText[0] != L'\0')
-					OutLog(TVTest::Interface::LOG_ERROR, L"ECMˆ—‚ÅƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½B(%s)", pInfo->pszText);
+					OutLog(TVTest::Interface::LOG_ERROR, L"ECMå‡¦ç†ã§ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚(%s)", pInfo->pszText);
 				else
-					OutLog(TVTest::Interface::LOG_ERROR, L"ECMˆ—‚ÅƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½B");
+					OutLog(TVTest::Interface::LOG_ERROR, L"ECMå‡¦ç†ã§ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚");
 			}
 		}
 		break;
@@ -2092,14 +2092,14 @@ void CCasProcessor::OnCasEvent(UINT Event, void *pParam)
 
 			if (m_ActiveServiceID != 0
 				&& m_pCasManager->GetEcmPIDByServiceID(m_ActiveServiceID) == pInfo->EcmPID) {
-				m_pClient->Notify(TVTest::Interface::NOTIFY_WARNING, L"Œ_–ñ‚³‚ê‚Ä‚¢‚È‚¢‚½‚ß‹’®‚Å‚«‚Ü‚¹‚ñ");
+				m_pClient->Notify(TVTest::Interface::NOTIFY_WARNING, L"å¥‘ç´„ã•ã‚Œã¦ã„ãªã„ãŸã‚è¦–è´ã§ãã¾ã›ã‚“");
 			}
 		}
 		break;
 
 	case TVCAS::EVENT_CARD_READER_HUNG:
-		m_pClient->Notify(TVTest::Interface::NOTIFY_ERROR, L"ƒJ[ƒhƒŠ[ƒ_[‚©‚ç‰“š‚ª‚ ‚è‚Ü‚¹‚ñ");
-		OutLog(TVTest::Interface::LOG_ERROR, L"ƒJ[ƒhƒŠ[ƒ_[‚©‚ç‰“š‚ª‚ ‚è‚Ü‚¹‚ñB");
+		m_pClient->Notify(TVTest::Interface::NOTIFY_ERROR, L"ã‚«ãƒ¼ãƒ‰ãƒªãƒ¼ãƒ€ãƒ¼ã‹ã‚‰å¿œç­”ãŒã‚ã‚Šã¾ã›ã‚“");
+		OutLog(TVTest::Interface::LOG_ERROR, L"ã‚«ãƒ¼ãƒ‰ãƒªãƒ¼ãƒ€ãƒ¼ã‹ã‚‰å¿œç­”ãŒã‚ã‚Šã¾ã›ã‚“ã€‚");
 		break;
 	}
 }
@@ -2156,7 +2156,7 @@ bool CCasProcessorPlugin::GetPluginInfo(TVTest::PluginInfo *pInfo)
 	pInfo->Flags          = 0;
 	pInfo->pszPluginName  = L"CAS Processor";
 	pInfo->pszCopyright   = L"Public Domain";
-	pInfo->pszDescription = L"CASˆ—‚ğs‚¢‚Ü‚·B";
+	pInfo->pszDescription = L"CASå‡¦ç†ã‚’è¡Œã„ã¾ã™ã€‚";
 	return true;
 }
 
@@ -2172,7 +2172,7 @@ bool CCasProcessorPlugin::Initialize()
 	bool fResult = m_pApp->RegisterTSProcessor(&Info);
 	Info.pTSProcessor->Release();
 	if (!fResult) {
-		m_pApp->AddLog(L"TSƒvƒƒZƒbƒT[‚ğ“o˜^‚Å‚«‚Ü‚¹‚ñB");
+		m_pApp->AddLog(L"TSãƒ—ãƒ­ã‚»ãƒƒã‚µãƒ¼ã‚’ç™»éŒ²ã§ãã¾ã›ã‚“ã€‚");
 		return false;
 	}
 
